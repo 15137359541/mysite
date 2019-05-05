@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
+    <!-- 引入 echarts.js -->
+    <script src="/static/js/echarts.min.js"></script>
+     <style type="text/css">
+        .contain{
+            width: 1200px;
+            height: 900px;
+            background: #ddd;
+            position: relative;
+            margin:auto;
+        }
+        .top{
+            position: absolute;
+            left: 34%;
+            top: 47%;
+            margin-left: -364px;
+            margin-top: -400px;
+            width: 1106px;
+            height: 153px;
+            background: #eee;
+            line-height: 82px;
+            font-size: 18px;
+            text-align: center;
+        }
+         .con{
+            position: absolute;
+            left: 37%;
+            top: 41%;
+            margin-left: -400px;
+            margin-top: -220px;
+            width: 1106px;
+            height: 720px;
+            background: #eee;
+            /*line-height: 200px;*/
+            font-size: 20px;
+            /*text-align: center;*/
+        }
+         .left_top{
+             position:absolute;
+             left:0;
+             top:0;
+{#             background:red;#}
+             width:57%;
+             height:24%;
+             /*z-index:200;*/
+         }
+         .left_bottom{
+             position:absolute;
+             left:0;
+             top:24%;
+{#             background:#777;#}
+             width:57%;
+             height:69%;
+             /*z-index:200;*/
+         }
+         .right_top{
+             position:absolute;
+             left:57%;
+             top:0;
+{#             background:#555555;#}
+             width:43%;
+             height:65%;
+             /*z-index:200;*/
+         }
+         .right_bottom{
+             position:absolute;
+             left:57%;
+             top:65%;
+{#             background:#fff;#}
+             width:43%;
+             height:35%;
+             /*z-index:200;*/
+         }
+         .money{
+             position:absolute;
+             right:10%;
+             top:50%;
+         }
+         /*.option1{*/
+            /*!*position:absolute;*!*/
+            /*height:30%;*/
+            /*top:40%;*/
+            /*right:20%;*/
+        /*}*/
+         select{
+            width:37%;
+             height:42px;
+             line-height:42px;
+             border-radius:3px;
+             text-align:center;
+             font-size:19px;
+             border-color:#ff0000;
+             border-style: solid;
+             border:0.5px;
+             box-shadow:0 0 1px #ff0000;
+             outline-color:#ff0000;
+         }
+         input{
+            height:2.7em;
+             text-align:center;
+             border-radius:7px;
+             width:10em;
+             border-color:#ff0000;
+             border-style: solid;
+             border:0.5px;
+             box-shadow:0 0 1px #ff0000;
+         }
+         .tab input{
+             width:61px;
+         }
+         .tab{
+             width:80%;
+             margin:10px 5px 20px 5px;
+
+         }
+         #filer{
+             width:2em;
+         }
+         .btn{
+             width:97%;
+             height:50px;
+             text-align:center;
+             font-size:20px;
+             line-height:50px;
+             margin:18px 5px -3px 5px;
+
+
+         }
+         h4{
+             display:inline-block;
+             color:#ff0000ba;
+         }
+         .zhisun2{
+             margin:21px 5px 5px 5px;
+
+         }
+         .zhisun1{
+             margin:18px 5px 5px 0px;
+         }
+         .zhiying{
+              margin:18px 5px 5px 0px;
+         }
+     </style>
+</head>
+<body>
+<div class="contain">
+    <div class="top">
+        <img src="/static/media/logo.png" alt="" >
+        <h1 style="display:inline-block;">股票点买界面</h1>
+    </div>
+    <div class="con">
+        <div class="left_top">
+            <div>
+                <span>委托券商：</span>
+                <select class="option1">
+                    <option value="- please select your options -"> - 请选择证券公司 -</option>
+                    <option value="华泰证券" class="s">华泰证券</option>
+                    <option value="国金证券" class="s">国金证券</option>
+                    <option value="银河证券" class="s">银河证券</option>
+                    <option value="同花顺" class="s">同花顺</option>
+                    <option value="雪球" class="s">雪球</option>
+                </select>
+            </div>
+            <div class="money">
+                <h4>账户余额：  0元</h4>
+            </div>
+        </div>
+        <div class="left_bottom">
+            <div class="list">
+                <select size="1" name="D1" onChange="javascript:test(this.value)">
+                <option value="0"> - 请选择股票 -</option>
+                <option value="00001" class="s">平安银行</option>
+                <option value="00002" class="s">中电控股</option>
+                <option value="00003" class="s">香港中华煤气</option>
+                <option value="00007" class="s">香港金融集团</option>
+                <option value="00254" class="s">国家联合资源</option>
+            </select>
+                <h4>代码：</h4>
+                <span class="code"></span>
+                <h4>当前价格：</h4>
+                <span class="pri"></span>
+            </div>
+
+            <div style="height:100%;">
+
+            <!--建设银行录入-->
+
+               <div class="layui-table" id="x2" >
+                   <div id="main" style="width: 590px;height:460px;"></div>
+               </div>
+
+            </div>
+        </div>
+        <div class="right_top">
+            <div>
+                <span>买入金额：</span>
+                <input type="text" placeholder="请输入金额" id="mm">
+                <table  cellpadding="10" class="tab">
+                  <tr>
+                    <th><input type="button" onclick="setInnerHTML1()" value="1万" /></th>
+                    <th><input type="button" onclick="setInnerHTML2()" value="2万" /></th>
+                    <th><input type="button" onclick="setInnerHTML3()" value="3万" /></th>
+                    <th><input type="button" onclick="setInnerHTML5()" value="5万" /></th>
+                  </tr>
+                  <tr>
+                    <th><input type="button" onclick="setInnerHTML10()" value="10万" /></th>
+                    <th><input type="button" onclick="setInnerHTML20()" value="20万" /></th>
+                    <th><input type="button" onclick="setInnerHTML30()" value="30万" /></th>
+                    <th><input type="button" onclick="setInnerHTML50()" value="50万" /></th>
+                  </tr>
+                </table>
+            </div>
+            <div>
+                <span>持仓时间：</span>
+                <input type="text" value="T + 1|D">
+                <br>
+                <div class="zhiying">
+                    <span>触发止盈：</span>
+                    <input type="text">
+                </div>
+
+                <div class="zhisun1"><span>触发止损：</span></div>
+
+                <div>
+                    <table class="zhisun2">
+                        <tr>
+                            <th><input type="text"></th>
+                            <th><input type="text"></th>
+                            <th><input type="text"></th>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        <div class="right_bottom">
+
+            <input type="checkbox" id="filer">
+            <label for="filer">我已阅并签署协议</label>
+            <br>
+            <input type="button" value="立即购买" class="btn">
+            <h5>点买时间段：交易日09:30-11:30 | 13:00-14:55</h5>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+function setInnerHTML1(){
+        document.getElementById("mm").value ="1万";
+    }
+    function setInnerHTML2(){
+        document.getElementById("mm").value ="2万";
+    }
+    function setInnerHTML3(){
+        document.getElementById("mm").value ="3万";
+    }
+    function setInnerHTML5(){
+        document.getElementById("mm").value ="5万";
+    }
+    function setInnerHTML10(){
+        document.getElementById("mm").value ="10万";
+    }
+    function setInnerHTML20(){
+        document.getElementById("mm").value ="20万";
+    }
+    function setInnerHTML30(){
+        document.getElementById("mm").value ="30万";
+    }
+    function setInnerHTML50(){
+        document.getElementById("mm").value ="50万";
+    }
+
+   {#画图script#}
+
+
+    //数据模型 time0 open1 close2 min3 max4 vol5 tag6 macd7 dif8 dea9
+    //['2015-10-19',18.56,18.25,18.19,18.56,55.00,0,-0.00,0.08,0.09]
+
+
+    function splitData(rawData) {
+      var categoryData = [];
+      var values = [];
+      var vols = [];
+      var macds = [];
+      var difs = [];
+      var deas = [];
+      for (var i = 0; i < rawData.length; i++) {
+        categoryData.push(rawData[i].splice(0, 1)[0]);
+        values.push(rawData[i])
+        vols.push(rawData[i][4]);
+        macds.push(rawData[i][6]);
+        difs.push(rawData[i][7]);
+        deas.push(rawData[i][8]);
+      }
+      return {
+        categoryData: categoryData,
+        values: values,
+        vols: vols,
+        macds: macds,
+        difs: difs,
+        deas: deas
+      };
+    }
+
+    function calculateMA(dayCount) {
+      var result = [];
+      for (var i = 0, len = data0.values.length; i < len; i++) {
+        if (i < dayCount) {
+          result.push('-');
+          continue;
+        }
+        var sum = 0;
+        for (var j = 0; j < dayCount; j++) {
+          sum += data0.values[i - j][1];
+        }
+        result.push(sum / dayCount);
+      }
+      return result;
+    }
+
+
+//    下拉选择
+
+    function test(Names){
+
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+{#        alert(Names),#}
+        $.ajax({
+				url:"/dianmai/",
+				type:"post",
+				data:{
+				    "name":Names,
+
+				},
+				success:function(returnData){
+                    document.getElementsByClassName('code')[0].innerHTML=returnData.code;
+				    document.getElementsByClassName('pri')[0].innerHTML=returnData.pri;
+                    console.log(returnData.pri);
+                    console.log(returnData.code);
+                    data0 = splitData(returnData.list_data);
+                    var option = {
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross'
+        }
+      },
+      grid: [{
+        left: '3%',
+        top: '1%',
+        height: '58%'
+      }, {
+        left: '3%',
+        right: '10%',
+        top: '65%',
+        height: '10%'
+      }, {
+        left: '3%',
+        right: '10%',
+        top: '78%',
+        height: '10%'
+      }],
+      xAxis: [{
+        type: 'category',
+        data: data0.categoryData,
+        scale: true,
+        boundaryGap: false,
+        axisLine: {
+          onZero: false,
+          lineStyle: {
+            color: 'red',
+          }
+        },
+        splitLine: {
+          show: false
+        },
+        splitNumber: 20
+      }, {
+        type: 'category',
+        gridIndex: 1,
+        data: data0.categoryData,
+        axisLabel: {
+          show: false
+        },
+
+      }, {
+        type: 'category',
+        gridIndex: 2,
+        data: data0.categoryData,
+        axisLabel: {
+          show: false
+        },
+
+      }],
+      yAxis: [{
+        scale: true,
+        splitArea: {
+          show: true
+        },
+        axisLine: {
+          lineStyle: {
+            color: 'red',
+          }
+        },
+        position: 'right'
+      }, {
+        gridIndex: 1,
+        splitNumber: 3,
+        axisLine: {
+          onZero: false,
+          lineStyle: {
+            color: 'red'
+
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        splitLine: {
+          show: false
+        },
+        axisLabel: {
+          show: true
+        },
+        position: 'right'
+      }, {
+        gridIndex: 2,
+        splitNumber: 4,
+        axisLine: {
+          onZero: false,
+          lineStyle: {
+            color: 'red'
+
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        splitLine: {
+          show: false
+        },
+        axisLabel: {
+          show: true
+        },
+        position: 'right'
+      }],
+      dataZoom: [{
+        type: 'inside',
+        start: 100,
+        end: 80
+      }, {
+        show: true,
+        type: 'slider',
+        y: '90%',
+        xAxisIndex: [0, 1],
+        start: 50,
+        end: 100
+      }, {
+        show: false,
+        xAxisIndex: [0, 2],
+        type: 'slider',
+        start: 20,
+        end: 100
+      }],
+      series: [{
+        name: '555',
+        type: 'candlestick',
+        data: data0.values,
+        markPoint: {
+          data: [{
+            name: 'XX标点'
+          }]
+        },
+        markLine: {
+          silent: true,
+          data: [{
+            yAxis: 2222,
+          }]
+        }
+      }, {
+        name: 'MA5',
+        type: 'line',
+        data: calculateMA(5),
+        smooth: true,
+        lineStyle: {
+          normal: {
+            opacity: 0.5
+          }
+        }
+      }, {
+        name: 'MA10',
+        type: 'line',
+        data: calculateMA(10),
+        smooth: true,
+        lineStyle: {
+          normal: {
+            opacity: 0.5
+          }
+        }
+      }, {
+        name: 'MA20',
+        type: 'line',
+        data: calculateMA(20),
+        smooth: true,
+        lineStyle: {
+          normal: {
+            opacity: 0.5
+          }
+        }
+      }, {
+        name: 'MA30',
+        type: 'line',
+        data: calculateMA(30),
+        smooth: true,
+        lineStyle: {
+          normal: {
+            opacity: 0.5
+          }
+        }
+      }, {
+        name: 'Volumn',
+        type: 'bar',
+        xAxisIndex: 1,
+        yAxisIndex: 1,
+        data: data0.vols,
+        itemStyle: {
+          normal: {
+            color: function (params) {
+              var colorList;
+              if (data0.values[params.dataIndex][1] > data0.values[params.dataIndex][0]) {
+                colorList = '#ef232a';
+              } else {
+                colorList = '#14b143';
+              }
+              return colorList;
+            },
+          }
+        }
+      }, {
+        name: 'MACD',
+        type: 'bar',
+        xAxisIndex: 2,
+        yAxisIndex: 2,
+        data: data0.macds,
+        itemStyle: {
+          normal: {
+            color: function (params) {
+              var colorList;
+              if (params.data >= 0) {
+                colorList = '#ef232a';
+              } else {
+                colorList = '#14b143';
+              }
+              return colorList;
+            },
+          }
+        }
+      }, {
+        name: 'DIF',
+        type: 'line',
+        xAxisIndex: 2,
+        yAxisIndex: 2,
+        data: data0.difs
+      }, {
+        name: 'DEA',
+        type: 'line',
+        xAxisIndex: 2,
+        yAxisIndex: 2,
+        data: data0.deas
+      }]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+                     myChart.setOption(option);
+                },
+				error:function(res){
+				    console.log("传送失败")
+				}
+			})
+
+
+
+    }
+
+
+
+
+
+
+  </script>
+</body>
+</html>

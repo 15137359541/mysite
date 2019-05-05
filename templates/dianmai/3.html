@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="/static/js/jquery-3.3.1.js"></script>
+{#    <script type="text/javascript" src="/static/js/jquery-1.4.4/jquery.min.js"></script>#}
+    <script type="text/javascript" src="/static/js/chosen_v1.8.7/chosen.jquery.min.js"></script>
+    <link href="/static/js/chosen_v1.8.7/chosen.css" type="text/css" rel="stylesheet" />
+{#    引入bootstrap#}
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <script src="/static/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+{#    end bootstrap引入#}
+
+    <!-- 引入 echarts.js -->
+    <script src="/static/js/echarts.min.js"></script>
+     <style type="text/css">
+        .contain{
+            width: 1200px;
+            height: 900px;
+            background: #ddd;
+            position: relative;
+            margin:auto;
+        }
+        .top{
+            position: absolute;
+            left: 34%;
+            top: 47%;
+            margin-left: -364px;
+            margin-top: -400px;
+            width: 1106px;
+            height: 153px;
+            background: #eee;
+            line-height: 82px;
+            font-size: 18px;
+            text-align: center;
+        }
+         .con{
+            position: absolute;
+            left: 37%;
+            top: 41%;
+            margin-left: -400px;
+            margin-top: -220px;
+            width: 1106px;
+            height: 720px;
+            background: #eee;
+            /*line-height: 200px;*/
+            font-size: 20px;
+            /*text-align: center;*/
+        }
+         .left_top{
+             position:absolute;
+             left:0;
+             top:0;
+{#             background:red;#}
+             width:57%;
+             height:24%;
+             /*z-index:200;*/
+         }
+         .left_bottom{
+             position:absolute;
+             left:0;
+             top:24%;
+{#             background:#777;#}
+             width:57%;
+             height:69%;
+             /*z-index:200;*/
+         }
+         .right_top{
+             position:absolute;
+             left:57%;
+             top:0;
+{#             background:#555555;#}
+             width:43%;
+             height:65%;
+             /*z-index:200;*/
+         }
+         .right_center{
+             position:absolute;
+             left:57%;
+             width:43%;
+             height:35%;
+             top:33%;
+{#             background:#888;#}
+         }
+         .right_bottom{
+             position:absolute;
+             left:57%;
+             top:69%;
+{#             background:#fff;#}
+             width:43%;
+             height:35%;
+             /*z-index:200;*/
+         }
+         .money{
+             position:absolute;
+             left:0;
+             top:50%;
+         }
+         /*.option1{*/
+            /*!*position:absolute;*!*/
+            /*height:30%;*/
+            /*top:40%;*/
+            /*right:20%;*/
+        /*}*/
+         select{
+            width:37%;
+             height:42px;
+             line-height:42px;
+             border-radius:3px;
+             text-align:center;
+             font-size:19px;
+             border-color:#ff0000;
+             border-style: solid;
+             border:0.5px;
+             box-shadow:0 0 1px #ff0000;
+             outline-color:#ff0000;
+         }
+         input{
+            height:2.7em;
+             text-align:center;
+             border-radius:7px;
+             width:6em;
+             border-color:#ff0000;
+             border-style: solid;
+             border:0.5px;
+             box-shadow:0 0 1px #ff0000;
+         }
+         .tab input{
+             width:61px;
+         }
+         .tab{
+             width:80%;
+             margin:10px 5px 10px 28px;
+{#             background-color:green;#}
+             border:0;
+             cellspacing:1px;
+         }
+         .tab th{
+             padding:2px;
+         }
+
+         #allow{
+             width:1.7em;
+             height:1.7em;
+             float:left;
+             margin-right:4%;
+
+             text-align:center;
+             border-radius:7px;
+             border-color:#ff0000;
+             border-style: solid;
+             border:0.5px;
+             box-shadow:0 0 0 #ff0000;
+
+         }
+         .btn_buy{
+             width:97%;
+             height:50px;
+             text-align:center;
+             font-size:20px;
+             line-height:50px;
+             margin:18px 5px -3px 5px;
+
+
+         }
+         h4{
+             display:inline-block;
+             color:#ff0000ba;
+             font-size:21px;
+         }
+         .distance{
+             margin:21px 5px 5px 5px;
+
+         }
+         .distance th{
+             padding:0 13px;
+         }
+         .zhisun{
+             margin:18px 5px 5px 0px;
+         }
+         .zhiying{
+              margin:18px 5px 5px 0px;
+         }
+         .btn-primary {
+        color: #f52;
+        background-color: #dddddd;
+        border-color: #ffffff;
+}
+         .error_tip2{float:right;
+             height:20px;
+             line-height:60px;
+             color:#e62e2e;
+             margin-right:4%;
+             display:none;}
+     </style>
+</head>
+<body>
+
+
+
+<div class="contain">
+    <div class="top">
+        <img src="/static/media/logo.png" alt="" >
+        <h1 style="display:inline-block;">股票点买界面</h1>
+    </div>
+    <div class="con">
+        <form action="{% url 'dianmai:dealStock' %}" method="post" class="form_con">
+            <div class="left_top">
+                <div>
+                    <span>委托券商：</span>
+{#                    <select class="option1" name="juanshang">#}
+{#                        <option value="0"> - 请选择证券公司 -</option>#}
+{#                        <option value="华泰证券" class="s">华泰证券</option>#}
+{#                        <option value="国金证券" class="s">国金证券</option>#}
+{#                        <option value="银河证券" class="s">银河证券</option>#}
+{#                        <option value="同花顺" class="s">同花顺</option>#}
+{#                        <option value="雪球" class="s">雪球</option>#}
+{#                    </select>#}
+                    <select name="juanshang"  data-placeholder=" 请选择证券公司" class="option1">
+                        <option value="-1"></option>
+                        <option value="华泰证券">华泰证券</option>
+                        <option value="国金证券">国金证券</option>
+                        <option value="银河证券">银河证券</option>
+                        <option value="同花顺">同花顺</option>
+                        <option value="雪球">雪球</option>
+                        <option value="{{ juanshang }}" selected="selected" >{{ juanshang }}</option>
+                    </select>
+                </div>
+                <div class="money">
+                    <h4>账户余额：</h4>
+                    <span class="sec"></span>
+                </div>
+            </div>
+            <div class="left_bottom">
+                <div class="list">
+{#                    <select size="1" name="gupiao" onChange="javascript:test(this.value)">#}
+{#                    <option value="0"> - 请选择股票 -</option>#}
+{#                    <option value="00001" class="s">平安银行</option>#}
+{#                    <option value="00002" class="s">中电控股</option>#}
+{#                    <option value="00003" class="s">香港中华煤气</option>#}
+{#                    <option value="00007" class="s">香港金融集团</option>#}
+{#                    <option value="00254" class="s">国家联合资源</option>#}
+{#                </select>#}
+
+                    <select name="gupiao" style="width: 170px;height:100px;" data-placeholder=" 请选择股票" class="dept_select" onChange="javascript:test(this.value)">
+                        <option value="-1"></option>
+
+{#                        从数据库中获取的数据处理#}
+{#                        {% for item in Datas %}#}
+{#                            <option value={{ item.code }}>{{ item.securityName}}  ({{ item.code }})</option>#}
+{#                        {% endfor %}#}
+                        {% for key,value in Datas.items %}
+                            <option value={{ key }}>{{ value}}  ({{ key }})</option>
+                        {% endfor %}
+                        <option value="{{ gupiao }}" selected="selected" >{{ gupiao }}</option>
+
+
+                    </select>
+
+{#                    <h4>代码：</h4>#}
+{#                    <span class="code"></span>#}
+                    <h4>当前价格：</h4>
+                    <span class="pri"></span>
+
+                </div>
+    
+                <div style="height:100%;">
+    
+                <!--建设银行录入-->
+    
+                   <div class="layui-table" id="x2" >
+                       <div id="main" style="width: 590px;height:460px;"></div>
+                   </div>
+    
+                </div>
+            </div>
+            <div class="right_top">
+                <div>
+                    <span>买入金额：</span>
+{#                    <input type="text" placeholder="请输入金额" id="mm"  name="money" onkeypress="return onlyNumber(event)" onkeyup="var source=this.value.replace(/,/g,'').split('.');source[0]=source[0].replace(/(\d)(?=(\d{3})+$)/ig,'$1,');this.value=source.join('.')">#}
+                    <input type="text" placeholder="请输入金额" id="mm"  name="money"  onkeyup="buy_money(this.id)" value="{{ money }}">
+                    <table class="tab">
+                      <tr>
+                        <th><input type="button" onclick="setInnerHTML1()" value="1万" /></th>
+                        <th><input type="button" onclick="setInnerHTML2()" value="2万" /></th>
+                        <th><input type="button" onclick="setInnerHTML3()" value="3万" /></th>
+                        <th><input type="button" onclick="setInnerHTML5()" value="5万" /></th>
+                      </tr>
+                      <tr>
+                        <th><input type="button" onclick="setInnerHTML10()" value="10万" /></th>
+                        <th><input type="button" onclick="setInnerHTML20()" value="20万" /></th>
+                        <th><input type="button" onclick="setInnerHTML30()" value="30万" /></th>
+                        <th><input type="button" onclick="setInnerHTML50()" value="50万" /></th>
+                      </tr>
+                    </table>
+                    <h4>可买股数：</h4><span id="quantity"></span>
+                </div>
+
+            </div>
+            <div class="right_center">
+                 <div>
+                    <span>持仓时间：</span>
+                    <input type="text" value="T + 1|D" name="time">
+                     <h4>开盘价：</h4>
+                     <span id="open_price"></span>
+                    <br>
+                    <div class="zhiying">
+                        <span>触发止盈：</span>
+                        <input type="text" name="zhiying" id="zhiying" onkeyup="cal_zhiying()" value="{{ zhiying }}">
+                        <h4>止盈点：</h4>
+                        <span id="zhiying_distance"></span>
+                    </div>
+
+                    <div class="zhisun">
+                        <span>触发止损：</span>
+                        <input type="text"  id = 'zhisun' name="zhisun" onkeyup="cal_zhisun()" value="{{ zhisun }}">
+                        <h4>止损点：</h4>
+                        <span id="zhisun_distance"></span>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="right_bottom">
+
+            <input type="checkbox" name="allow" id="allow"  checked="checked">
+{#            <label for="filer"></label>#}
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                  我已阅并签署协议
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                      </div>
+                      <div class="modal-body">
+                        ...
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <span class="error_tip2">{{ error_tip2 }}</span>
+            <br>
+            <input type="submit" value="立即购买" class="btn_buy" id="submit">
+            <h5>点买时间段：交易日09:30-11:30 | 13:00-14:55</h5>
+        </div>
+        </form>
+    </div>
+
+
+</div>
+
+<script type="text/javascript">
+{#    begin计算止盈点#}
+    function cal_zhiying() {
+        var zhiying_price = document.getElementById('zhiying').value
+        var open_price = document.getElementById("open_price").innerHTML
+        var zhiyingpoint=(((zhiying_price-open_price)/open_price)*100).toFixed(3)
+        document.getElementById('zhiying_distance').innerHTML=zhiyingpoint+"%"
+        if (zhiyingpoint>=0){
+            console.log('止盈点：')
+            console.log(zhiyingpoint)
+        }
+    }
+{#    end计算止盈点#}
+{#    begin计算止损点#}
+    function cal_zhisun() {
+        var zhisun_price = document.getElementById('zhisun').value
+        var open_price = document.getElementById("open_price").innerHTML
+        document.getElementById('zhisun_distance').innerHTML=(((zhisun_price-open_price)/open_price)*100).toFixed(3)+"%"
+    }
+{#    end计算止损点#}
+
+{#    checkbox是否被选择#}
+    $(function () {
+        error_check = false;
+        $('#allow').click(function() {
+            if($(this).is(':checked'))
+            {
+                error_check = false;
+                $(this).siblings('span').hide();
+            }
+            else
+            {
+                error_check = true;
+                $(this).siblings('span').html('请勾选同意');
+                $(this).siblings('span').show();
+            }
+	    });
+{#        提交处理,看是否允许提交#}
+        var submitBtn = document.getElementById('submit');
+        submitBtn.onclick=function (enent) {
+            if( error_check == false)
+		{
+		    alert("请等待...")
+			return true;
+
+		}
+		else
+		{
+			alert("请选择协议")
+            return false;
+		}
+        }
+
+
+    })
+
+{#end checkbox是否被选择#}
+
+{#    计算股数#}
+    function buy_money(x) {
+        var sec_price = document.getElementsByClassName('sec')[0].innerHTML
+        var input_price = document.getElementById(x).value
+        if (input_price=="1万"){
+            input_price='10000'
+        }else if(input_price=='2万'){
+            input_price='20000'
+        }
+        else if(input_price=='3万'){
+            input_price='30000'
+        }
+        else if(input_price=='5万'){
+            input_price='50000'
+        }
+        else if(input_price=='10万'){
+            input_price='100000'
+        }
+        else if(input_price=='20万'){
+            input_price='200000'
+        }
+        else if(input_price=='30万'){
+            input_price='300000'
+        }
+        else if(input_price=='50万'){
+            input_price='500000'
+        }
+
+
+{#        alert(input_price)#}
+        if(sec_price){
+            console.log(input_price)
+            input_price=input_price.toString().replace(/,/g,"");{# 必须加toString #}
+            console.log(input_price)
+            var _quantity=sec_price/input_price
+{#            alert(input_price)#}
+            if(isNaN(_quantity)){
+{#                alert('股数无法计算')#}
+                document.getElementById('quantity').innerHTML=0;
+
+            }else if(_quantity == Number.POSITIVE_INFINITY){
+                document.getElementById('quantity').innerHTML=0
+            }
+            else{
+                document.getElementById('quantity').innerHTML=(sec_price/input_price).toFixed(3){# 四舍五入，保留三位小数 #}
+            }
+
+        }else{
+            alert("请确保选择券商或者价格")
+        }
+{#        设置三位一逗号#}
+{#        当点击文字时，分割会报错（还没有解决）#}
+        try{
+            var source=input_price.replace(/,/g,'').split('.');
+        source[0]=source[0].replace(/(\d)(?=(\d{3})+$)/ig,'$1,');
+        document.getElementById(x).value=source.join('.')
+        }catch(err){
+            console.log('字符串无法转换')
+{#            console.log(err)#}
+        }
+
+    }
+{#    end计算股数#}
+
+
+    $(".dept_select").chosen({
+    no_results_text: "没有找到结果！",//搜索无结果时显示的提示
+    search_contains:true,   //关键字模糊搜索，设置为false，则只从开头开始匹配
+    allow_single_deselect:true, //是否允许取消选择
+    max_selected_options:6  //当select为多选时，最多选择个数
+});
+
+     $(".option1").chosen({
+    no_results_text: "没有找到结果！",//搜索无结果时显示的提示
+    search_contains:true,   //关键字模糊搜索，设置为false，则只从开头开始匹配
+    allow_single_deselect:true, //是否允许取消选择
+    max_selected_options:1  //当select为多选时，最多选择个数
+});
+
+function setInnerHTML1(){
+        document.getElementById("mm").value ="1万";
+        {# 触发计算股数代码#}
+      x="mm";
+      buy_money(x);
+    }
+    function setInnerHTML2(){
+        document.getElementById("mm").value ="2万";
+        {# 触发计算股数代码#}
+          x="mm";
+          buy_money(x);
+    }
+    function setInnerHTML3(){
+        document.getElementById("mm").value ="3万";
+        {# 触发计算股数代码#}
+          x="mm";
+          buy_money(x);
+    }
+    function setInnerHTML5(){
+        document.getElementById("mm").value ="5万";
+        {# 触发计算股数代码#}
+          x="mm";
+          buy_money(x);
+    }
+    function setInnerHTML10(){
+        document.getElementById("mm").value ="10万";
+        {# 触发计算股数代码#}
+          x="mm";
+          buy_money(x);
+    }
+    function setInnerHTML20(){
+        document.getElementById("mm").value ="20万";
+        {# 触发计算股数代码#}
+          x="mm";
+          buy_money(x);
+    }
+    function setInnerHTML30(){
+        document.getElementById("mm").value ="30万";
+        {# 触发计算股数代码#}
+          x="mm";
+          buy_money(x);
+    }
+    function setInnerHTML50(){
+        document.getElementById("mm").value ="50万";
+        {# 触发计算股数代码#}
+          x="mm";
+          buy_money(x);
+    }
+
+   {#画图script#}
+
+
+    //数据模型 time0 open1 close2 min3 max4 vol5 tag6 macd7 dif8 dea9
+    //['2015-10-19',18.56,18.25,18.19,18.56,55.00,0,-0.00,0.08,0.09]
+
+
+    function splitData(rawData) {
+      var categoryData = [];
+      var values = [];
+      var vols = [];
+      var macds = [];
+      var difs = [];
+      var deas = [];
+      for (var i = 0; i < rawData.length; i++) {
+        categoryData.push(rawData[i].splice(0, 1)[0]);
+        values.push(rawData[i])
+        vols.push(rawData[i][4]);
+        macds.push(rawData[i][6]);
+        difs.push(rawData[i][7]);
+        deas.push(rawData[i][8]);
+      }
+      return {
+        categoryData: categoryData,
+        values: values,
+        vols: vols,
+        macds: macds,
+        difs: difs,
+        deas: deas
+      };
+    }
+
+    function calculateMA(dayCount) {
+      var result = [];
+      for (var i = 0, len = data0.values.length; i < len; i++) {
+        if (i < dayCount) {
+          result.push('-');
+          continue;
+        }
+        var sum = 0;
+        for (var j = 0; j < dayCount; j++) {
+          sum += data0.values[i - j][1];
+        }
+        result.push(sum / dayCount);
+      }
+      return result;
+    }
+
+    //下拉证券商代码
+    $(function(){
+      $(".option1").bind('change',function(){
+//          console.log($(this).html());console.log($(this).val());
+
+          var mySecurities = $(this).val();
+          $.ajax({
+				url:"/dianmai/securities",
+				type:"get",
+				data:{
+				    "sec":mySecurities,
+
+				},
+				success:function(returnData){
+                    document.getElementsByClassName('sec')[0].innerHTML=returnData.price;
+                    {# 触发计算股数代码#}
+                      x="mm";
+                      buy_money(x);
+                },
+				error:function(res){
+				    console.log("传送失败")
+				}
+			})
+
+                          })
+                      });
+
+
+
+//    下拉选择【股票代码】
+
+    function test(Names){
+
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+{#        alert(Names),#}
+        $.ajax({
+				url:"/dianmai/",
+				type:"post",
+				data:{
+				    "name":Names,
+
+				},
+				success:function(returnData){
+                    document.getElementById('open_price').innerHTML=returnData.open;
+				    document.getElementsByClassName('pri')[0].innerHTML=returnData.pri;
+{#                    console.log(returnData.pri);#}
+{#                    console.log(returnData.code);#}
+                    data0 = splitData(returnData.list_data);
+                    var option = {
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross'
+        }
+      },
+      grid: [{
+        left: '3%',
+        top: '1%',
+        height: '58%'
+      }, {
+        left: '3%',
+        right: '10%',
+        top: '65%',
+        height: '10%'
+      }, {
+        left: '3%',
+        right: '10%',
+        top: '78%',
+        height: '10%'
+      }],
+      xAxis: [{
+        type: 'category',
+        data: data0.categoryData,
+        scale: true,
+        boundaryGap: false,
+        axisLine: {
+          onZero: false,
+          lineStyle: {
+            color: 'red',
+          }
+        },
+        splitLine: {
+          show: false
+        },
+        splitNumber: 20
+      }, {
+        type: 'category',
+        gridIndex: 1,
+        data: data0.categoryData,
+        axisLabel: {
+          show: false
+        },
+
+      }, {
+        type: 'category',
+        gridIndex: 2,
+        data: data0.categoryData,
+        axisLabel: {
+          show: false
+        },
+
+      }],
+      yAxis: [{
+        scale: true,
+        splitArea: {
+          show: true
+        },
+        axisLine: {
+          lineStyle: {
+            color: 'red',
+          }
+        },
+        position: 'right'
+      }, {
+        gridIndex: 1,
+        splitNumber: 3,
+        axisLine: {
+          onZero: false,
+          lineStyle: {
+            color: 'red'
+
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        splitLine: {
+          show: false
+        },
+        axisLabel: {
+          show: true
+        },
+        position: 'right'
+      }, {
+        gridIndex: 2,
+        splitNumber: 4,
+        axisLine: {
+          onZero: false,
+          lineStyle: {
+            color: 'red'
+
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        splitLine: {
+          show: false
+        },
+        axisLabel: {
+          show: true
+        },
+        position: 'right'
+      }],
+      dataZoom: [{
+        type: 'inside',
+        start: 100,
+        end: 80
+      }, {
+        show: true,
+        type: 'slider',
+        y: '90%',
+        xAxisIndex: [0, 1],
+        start: 50,
+        end: 100
+      }, {
+        show: false,
+        xAxisIndex: [0, 2],
+        type: 'slider',
+        start: 20,
+        end: 100
+      }],
+      series: [{
+        name: '555',
+        type: 'candlestick',
+        data: data0.values,
+        markPoint: {
+          data: [{
+            name: 'XX标点'
+          }]
+        },
+        markLine: {
+          silent: true,
+          data: [{
+            yAxis: 2222,
+          }]
+        }
+      }, {
+        name: 'MA5',
+        type: 'line',
+        data: calculateMA(5),
+        smooth: true,
+        lineStyle: {
+          normal: {
+            opacity: 0.5
+          }
+        }
+      }, {
+        name: 'MA10',
+        type: 'line',
+        data: calculateMA(10),
+        smooth: true,
+        lineStyle: {
+          normal: {
+            opacity: 0.5
+          }
+        }
+      }, {
+        name: 'MA20',
+        type: 'line',
+        data: calculateMA(20),
+        smooth: true,
+        lineStyle: {
+          normal: {
+            opacity: 0.5
+          }
+        }
+      }, {
+        name: 'MA30',
+        type: 'line',
+        data: calculateMA(30),
+        smooth: true,
+        lineStyle: {
+          normal: {
+            opacity: 0.5
+          }
+        }
+      }, {
+        name: 'Volumn',
+        type: 'bar',
+        xAxisIndex: 1,
+        yAxisIndex: 1,
+        data: data0.vols,
+        itemStyle: {
+          normal: {
+            color: function (params) {
+              var colorList;
+              if (data0.values[params.dataIndex][1] > data0.values[params.dataIndex][0]) {
+                colorList = '#ef232a';
+              } else {
+                colorList = '#14b143';
+              }
+              return colorList;
+            },
+          }
+        }
+      }, {
+        name: 'MACD',
+        type: 'bar',
+        xAxisIndex: 2,
+        yAxisIndex: 2,
+        data: data0.macds,
+        itemStyle: {
+          normal: {
+            color: function (params) {
+              var colorList;
+              if (params.data >= 0) {
+                colorList = '#ef232a';
+              } else {
+                colorList = '#14b143';
+              }
+              return colorList;
+            },
+          }
+        }
+      }, {
+        name: 'DIF',
+        type: 'line',
+        xAxisIndex: 2,
+        yAxisIndex: 2,
+        data: data0.difs
+      }, {
+        name: 'DEA',
+        type: 'line',
+        xAxisIndex: 2,
+        yAxisIndex: 2,
+        data: data0.deas
+      }]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+                     myChart.setOption(option);
+                     cal_zhiying();
+                    cal_zhisun();
+                },
+				error:function(res){
+				    console.log("传送失败")
+				}
+			})
+
+
+
+    }
+
+{#end下拉#}
+
+{#    自动刷新图片#}
+{#    $(function(){#}
+{#                          $(".list select").bind('change',function(){#}
+{#                            console.log($(this).html());console.log($(this).val());#}
+{#                              alert("sjdf");#}
+{#                              myVar = setTimeout(alertFunc,3000)#}
+{##}
+{#                          })#}
+{#    })#}
+{##}
+{#    function alertFunc() {#}
+{#            setInter();#}
+{#        }#}
+{##}
+{##}
+{#    function setInter(){#}
+{#        var seleCon=document.getElementsByName("gupiao")[0].value;#}
+{#        console.log(seleCon)#}
+{#           var aa = setInterval(function(){ test(seleCon) }, 60000);#}
+{#        }#}
+
+{#    end自动刷新#}
+
+//实时刷新当前价格
+    var aa = setInterval(function(){ getPriceNow() }, 100000);
+   function getPriceNow(){
+       var Names=document.getElementsByClassName("dept_select")[0].value;
+       console.log(Names)
+       if (Names=='-1'){
+           return;
+       }else{
+           $.ajax({
+				url:"/dianmai/getPriceNow",
+				type:"get",
+				data:{
+				    "name":Names,
+
+				},
+				success:function(returnData){
+                    document.getElementById('open_price').innerHTML=returnData.open;
+				    document.getElementsByClassName('pri')[0].innerHTML=returnData.pri;
+                    console.log(returnData.pri);
+                     cal_zhiying();
+                    cal_zhisun();
+                },
+				error:function(res){
+				    console.log("传送失败")
+				}
+			})
+       }
+
+   }
+{#end 实时刷新当前价格#}
+  </script>
+</body>
+</html>
